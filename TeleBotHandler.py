@@ -53,9 +53,9 @@ class TeleBotHandler:
 You can use these commands:\n/start for this message\n /reverse to reverse string'
 
         in_text = update['message']['text']
-        com_lenght = update['message']['entities'][0]['length']
-        command = in_text[1:com_lenght]
-        in_text = in_text[com_lenght:].strip()
+        com_length = update['message']['entities'][0]['length']
+        command = in_text[1:com_length]
+        in_text = in_text[com_length:].strip()
 
         if command in commands:
             if command == 'start':
