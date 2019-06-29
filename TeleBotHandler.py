@@ -47,6 +47,22 @@ class TeleBotHandler:
 
         return bot_response + ', ' + chat_name
 
+    def command_handler(self, update):
+        commands = ['start', 'reverse']
+        hello_msg = 'I\'m stupid bot. I can only react on hello.\n \
+You can use these commands:\n/start for this message\n /reverse to reverse string'
+
+        in_text = update['message']['text']
+        com_lenght = update['message']['entities'][0]['length']
+        command = in_text[1:com_lenght]
+        in_text = in_text[com_lenght:].strip()
+
+        if command in commands:
+            if command == 'start':
+                return hello_msg
+            if command == 'reverse':
+                return in_text[::-1]
+
     def send_message(self, chat_id, out_text):
         params = {'chat_id': chat_id, 'text': out_text}
         method = 'sendMessage'
