@@ -17,7 +17,7 @@ def is_command(update):
 def main():
     formatsring = '%(asctime)s %(levelname)s:%(message)s'
     dateformat = '%Y-%m-%d %H:%M:%S'
-    logging.basicConfig(filename='bot.log', format=formatsring, datefmt=dateformat, level=logging.DEBUG)
+    logging.basicConfig(filename='bot.log', format=formatsring, datefmt=dateformat, level=logging.INFO)
 
     with open('config.json', 'r') as cfg_file:
         data = json.load(cfg_file)
@@ -30,13 +30,14 @@ def main():
         for update in updates_list:
             cur_update_id = update['update_id']
             cur_chat_id = update['message']['chat']['id']
+            cur_msg_id = update['message']['message_id']
 
             if is_command(update):
                 bot_response = bot.command_handler(update)
             else:
                 bot_response = bot.request_handler(update)
 
-            bot.send_message(cur_chat_id, bot_response)
+            bot.send_message(cur_chat_id, cur_msg_id, bot_response)
             new_offset = cur_update_id + 1
 
         # print(new_offset, '\n', datetime.datetime.now().second)

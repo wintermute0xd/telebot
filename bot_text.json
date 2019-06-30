@@ -1,0 +1,27 @@
+{
+  "start": {
+    "en": "Hello, {}! I\\'m stupid bot. I can only react on 'hello'.\nYou can use these commands:\n/start for this message\n/reverse to reverse string\n/cat to get random cat photo\n/dog to get random dog photo.",
+    "ru": "Привет, {}! Я тупой бот, могу реагировать только на слово 'Привет'. \nМогу выполнять такие команды:\n/start для вывода этого сообщения\n/reverse для реверса строки\n/cat для фотки кота\n/dog для фотки собаки.",
+    "uk": "Привіт, {}! Я тупий бот, можу реагувати тільки на слово 'Привіт'. \nМожу виконувати такі команди:\n/start для виведення цього повідомлення\n/reverse для реверса рядка\n/cat для фотки кота\n/dog для фотки собаки."
+  },
+  "hello_morning": {
+    "en": "Good morning",
+    "ru": "Доброе утро",
+    "uk": "Доброго ранку"
+  },
+  "hello_day": {
+    "en": "Good day",
+    "ru": "Добрый день",
+    "uk": "Доброго дня"
+  },
+  "hello_evening": {
+    "en": "Good evening",
+    "ru": "Добрый вечер",
+    "uk": "Доброго вечора"
+  },
+  "hello_night": {
+    "en": "Good night",
+    "ru": "Доброй ночи",
+    "uk": "Доброї ночі"
+  }
+}
