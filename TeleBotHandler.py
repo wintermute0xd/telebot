@@ -14,6 +14,8 @@ class TeleBotHandler:
     def __init__(self, token):
         self.token = token
         self.api_url = 'https://api.telegram.org/bot' + token + '/'
+        with open('bot_text.json', 'r', encoding='utf-8') as text_file:
+            self.bot_text = json.load(text_file)
 
     # gets updates from telegram api via GET and returning update json object
     def get_updates(self, offset=None, timeout=60):
@@ -48,8 +50,6 @@ class TeleBotHandler:
         return contents[0]['url']
 
     def request_handler(self, update):
-        with open('bot_text.json', 'r') as text_file:
-            bot_text = json.load(text_file)
 
         hello_text = ['hello', 'good day', 'good morning', 'good evening', 'привет', 'привіт', 'добрый день', 'доброго дня']
         now = datetime.datetime.now()
@@ -61,27 +61,26 @@ class TeleBotHandler:
 
         if in_text.lower() in hello_text:
             if 4 <= cur_hour <= 12:
-                response = bot_text['hello_morning'][lang]
+                response = self.bot_text['hello_morning'][lang]
             elif 12 < cur_hour <= 17:
-                response = bot_text['hello_day'][lang]
+                response = self.bot_text['hello_day'][lang]
             elif 17 < cur_hour <= 22:
-                response = bot_text['hello_evening'][lang]
+                response = self.bot_text['hello_evening'][lang]
             elif 22 < cur_hour < 4:
-                response = bot_text['hello_night'][lang]
+                response = self.bot_text['hello_night'][lang]
         response = response + ', ' + chat_name
 
         return self.response_formatter('text', response)
 
     def command_handler(self, update):
         commands = ['start', 'reverse', 'cat', 'dog']
-        hello_msg = 'Hello, {}! I\'m stupid bot. I can only react on "hello".\n \
-You can use these commands:\n/start for this message\n/reverse to reverse string\n/cat to get random cat photo\n/dog\
- to get random dog photo'.format(update['message']['chat']['first_name'])
 
+        lang = update['message']['from']['language_code']
         in_text = update['message']['text']
         com_length = update['message']['entities'][0]['length']
         command = in_text[1:com_length]
         in_text = in_text[com_length:].strip()
+        hello_msg = self.bot_text['start'][lang].format(update['message']['chat']['first_name'])
 
         if command in commands:
             if command == 'start':
