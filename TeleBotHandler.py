@@ -11,6 +11,7 @@ Can get updates from Telegram API and make response in depends of chat text mess
 
 
 class TeleBotHandler:
+
     def __init__(self, token):
         self.token = token
         self.api_url = 'https://api.telegram.org/bot' + token + '/'
@@ -29,6 +30,15 @@ class TeleBotHandler:
         result_json = resp.json()['result']
         return result_json
 
+    def get_message_key(self, update):
+        # check if message was edited
+        if 'message' in update:
+            self.message_key = 'message'
+        else:
+            self.message_key = 'edited_message'
+
+        return self.message_key
+
     # makes dict with message type (text, photo, etc), send method and response msg itself
     def response_formatter(self, msg_type, resp):
         if msg_type == 'text':
@@ -39,6 +49,12 @@ class TeleBotHandler:
             method = 'sendMessage'
         bot_response = {'type': msg_type, 'resp': resp, 'method': method}
         return bot_response
+
+    def is_command(self, update):
+        if 'entities' in update[self.message_key] and update[self.message_key]['entities'][0]['type'] == 'bot_command':
+            return True
+        else:
+            return False
 
     # requests random dog or random cat api and returns image url
     def get_dog(self, dog_api_url):
@@ -54,9 +70,13 @@ class TeleBotHandler:
         hello_text = ['hello', 'good day', 'good morning', 'good evening', 'привет', 'привіт', 'добрый день', 'доброго дня']
         now = datetime.datetime.now()
         cur_hour = now.hour
-        in_text = update['message']['text']
-        chat_name = update['message']['chat']['first_name']
-        lang = update['message']['from']['language_code']
+
+        if self.is_command(update):
+            return self.command_handler(update)
+
+        in_text = update[self.message_key]['text']
+        chat_name = update[self.message_key]['chat']['first_name']
+        lang = update[self.message_key]['from']['language_code']
         response = 'I don\'t understand you'
 
         if in_text.lower() in hello_text:
@@ -75,12 +95,12 @@ class TeleBotHandler:
     def command_handler(self, update):
         commands = ['start', 'reverse', 'cat', 'dog']
 
-        lang = update['message']['from']['language_code']
-        in_text = update['message']['text']
-        com_length = update['message']['entities'][0]['length']
+        lang = update[self.message_key]['from']['language_code']
+        in_text = update[self.message_key]['text']
+        com_length = update[self.message_key]['entities'][0]['length']
         command = in_text[1:com_length]
         in_text = in_text[com_length:].strip()
-        hello_msg = self.bot_text['start'][lang].format(update['message']['chat']['first_name'])
+        hello_msg = self.bot_text['start'][lang].format(update[self.message_key]['chat']['first_name'])
 
         if command in commands:
             if command == 'start':
