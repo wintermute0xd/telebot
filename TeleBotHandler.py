@@ -102,17 +102,16 @@ class TeleBotHandler:
         in_text = in_text[com_length:].strip()
         hello_msg = self.bot_text['start'][lang].format(update[self.message_key]['chat']['first_name'])
 
-        if command in commands:
-            if command == 'start':
-                return self.response_formatter('text', hello_msg)
-            elif command == 'reverse':
-                return self.response_formatter('text', in_text[::-1])
-            elif command == 'cat':
-                img_url = self.get_cat('https://api.thecatapi.com/v1/images/search')
-                return self.response_formatter('photo', img_url)
-            elif command == 'dog':
-                img_url = self.get_dog('https://random.dog/woof.json')
-                return self.response_formatter('photo', img_url)
+        if command == 'start':
+            return self.response_formatter('text', hello_msg)
+        elif command == 'reverse':
+            return self.response_formatter('text', in_text[::-1])
+        elif command == 'cat':
+            img_url = self.get_cat('https://api.thecatapi.com/v1/images/search')
+            return self.response_formatter('photo', img_url)
+        elif command == 'dog':
+            img_url = self.get_dog('https://random.dog/woof.json')
+            return self.response_formatter('photo', img_url)
         else:
             return self.response_formatter('text', 'Unknown command')
 
